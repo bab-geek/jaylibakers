@@ -1,13 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from './Button';
 
 const Hero: React.FC = () => {
-  const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleScroll = async (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
+    
+    if (isLoading) return;
+
+    setIsLoading(true);
+    
+    // Simulate loading/processing delay for visual feedback
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
     const element = document.getElementById('menu');
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
+    
+    setIsLoading(false);
   };
 
   return (
@@ -22,7 +34,7 @@ const Hero: React.FC = () => {
           alt="Delicious pastries background" 
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-brand-darkBrown/50"></div>
+        <div className="absolute inset-0 bg-[#4E342E]/50"></div>
       </div>
 
       {/* Content */}
@@ -42,7 +54,8 @@ const Hero: React.FC = () => {
               className="inline-block w-full sm:w-auto"
             >
               <Button 
-                className="animate-pulse-slow w-full sm:w-auto text-base px-8 py-3.5 md:text-lg md:px-10 md:py-4 bg-brand-darkBrown text-brand-cream hover:bg-brand-brown hover:text-white font-bold shadow-lg hover:shadow-xl hover:animate-none border-2 border-brand-cream/20"
+                isLoading={isLoading}
+                className={`w-full sm:w-auto text-base px-8 py-3.5 md:text-lg md:px-10 md:py-4 !bg-[#4E342E] text-brand-cream hover:!bg-[#8D6E63] hover:text-white font-bold shadow-lg hover:shadow-xl border-2 border-brand-cream/20 ${isLoading ? '' : 'animate-pulse-slow hover:animate-none'}`}
               >
                 View Menu
               </Button>
