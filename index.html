@@ -4,56 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Jayli Bakers | Freshly Baked Happiness</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              brand: {
-                cream: '#FDF6E3',
-                pink: '#F4C2C2',
-                brown: '#8D6E63',
-                darkBrown: '#4E342E',
-                accent: '#FFAB91',
-              }
-            },
-            fontFamily: {
-              serif: ['Georgia', 'Cambria', '"Times New Roman"', 'Times', 'serif'],
-              sans: ['"Helvetica Neue"', 'Helvetica', 'Arial', 'sans-serif'],
-            },
-            keyframes: {
-              fadeInUp: {
-                '0%': { opacity: '0', transform: 'translateY(20px)' },
-                '100%': { opacity: '1', transform: 'translateY(0)' },
-              },
-              pulseSlow: {
-                '0%, 100%': { transform: 'scale(1)' },
-                '50%': { transform: 'scale(1.05)' },
-              }
-            },
-            animation: {
-              'fade-in-up': 'fadeInUp 0.8s ease-out both',
-              'fade-in-up-delay-1': 'fadeInUp 0.8s ease-out 0.3s both',
-              'fade-in-up-delay-2': 'fadeInUp 0.8s ease-out 0.6s both',
-              'pulse-slow': 'pulseSlow 3s ease-in-out infinite',
-            }
-          }
-        }
-      }
-    </script>
-  <script type="importmap">
-{
-  "imports": {
-    "react": "https://aistudiocdn.com/react@^19.2.1",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
-    "react/": "https://aistudiocdn.com/react@^19.2.1/",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.556.0"
-  }
-}
-</script>
-</head>
+    </head>
   <body class="bg-brand-cream text-brand-darkBrown antialiased">
     <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
   </body>
 </html>
