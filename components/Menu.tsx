@@ -1,5 +1,5 @@
-import React from 'react';
-import { ShoppingCart, Plus } from 'lucide-react';
+import React, { useState } from 'react';
+import { ShoppingCart, Plus, AlertCircle, MessageCircle } from 'lucide-react';
 import Button from './Button';
 import { Cake } from '../types';
 import { useCart } from '../context/CartContext';
@@ -51,9 +51,37 @@ const cakes: Cake[] = [
 
 const Menu: React.FC = () => {
   const { addToCart } = useCart();
+  const [orderingId, setOrderingId] = useState<number | null>(null);
+  const [errorId, setErrorId] = useState<number | null>(null);
+
+  const handleOrder = async (cake: Cake) => {
+    setOrderingId(cake.id);
+    setErrorId(null);
+
+    // Simulate processing delay for better UX
+    await new Promise(resolve => setTimeout(resolve, 800));
+
+    try {
+      const phoneNumber = "254706816485";
+      const message = `Hello Jayli Bakers, 👋\n\nI would like to place a direct order for:\n\n🎂 *${cake.name}*\nPrice: KES ${cake.price.toLocaleString()}\n\n🚚 *Delivery / Collection:*\nDo you require delivery within Mbita? (Yes/No):\n- If Yes, Delivery Address/Landmark:\n\n📅 *Preferred Date & Time:*\n- Date:\n- Time:\n\nKindly confirm availability.`;
+      
+      const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+      const newWindow = window.open(url, '_blank');
+
+      // Check if popup was blocked
+      if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+        throw new Error('Popup blocked');
+      }
+    } catch (err) {
+      console.error("Order failed:", err);
+      setErrorId(cake.id);
+    } finally {
+      setOrderingId(null);
+    }
+  };
 
   return (
-    <section id="menu" className="scroll-mt-28 py-16 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto bg-brand-cream">
+    <section id="menu" className="scroll-mt-28 py-16 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto bg-brand-cream/50 rounded-3xl my-8">
       <div className="text-center mb-12 md:mb-16">
         <h2 className="text-3xl md:text-5xl font-serif font-bold text-brand-darkBrown mb-4">
           Our Signature Cakes
@@ -101,14 +129,33 @@ const Menu: React.FC = () => {
                 {cake.description}
               </p>
               
-              <div className="mt-auto">
-                <Button 
-                  onClick={() => addToCart(cake)}
-                  className="w-full !bg-[#4E342E] hover:!bg-[#8D6E63] text-white shadow-md hover:shadow-lg border border-transparent"
-                >
-                  <ShoppingCart size={18} />
-                  Add to Cart
-                </Button>
+              <div className="mt-auto space-y-3">
+                {errorId === cake.id && (
+                  <div className="text-red-500 text-xs flex items-center gap-1 bg-red-50 p-2 rounded-lg animate-fade-in-up border border-red-100">
+                    <AlertCircle size={14} className="flex-shrink-0" />
+                    <span>Could not open WhatsApp. Please try again later.</span>
+                  </div>
+                )}
+
+                <div className="flex gap-3">
+                  <Button 
+                    onClick={() => handleOrder(cake)}
+                    disabled={orderingId === cake.id}
+                    isLoading={orderingId === cake.id}
+                    variant="outline"
+                    className="flex-1 text-sm px-3 !border-[#4E342E] !text-[#4E342E] hover:!bg-[#4E342E] hover:!text-brand-cream"
+                  >
+                    {orderingId === cake.id ? 'Opening...' : 'Order Now'}
+                  </Button>
+
+                  <Button 
+                    onClick={() => addToCart(cake)}
+                    className="flex-1 text-sm px-3 !bg-[#4E342E] hover:!bg-[#8D6E63] text-white shadow-md hover:shadow-lg border border-transparent"
+                  >
+                    <ShoppingCart size={16} />
+                    Add
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
