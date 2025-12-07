@@ -134,7 +134,7 @@ const CartDrawer: React.FC = () => {
 
             <Button 
               onClick={handleCheckout} 
-              className="w-full justify-between group"
+              className="w-full justify-between group !bg-brand-darkBrown hover:!bg-brand-brown text-brand-cream"
             >
               <span>Checkout via WhatsApp</span>
               <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />

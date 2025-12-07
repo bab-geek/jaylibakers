@@ -42,7 +42,7 @@ const Hero: React.FC = () => {
               className="inline-block w-full sm:w-auto"
             >
               <Button 
-                className="animate-pulse-slow w-full sm:w-auto text-base px-8 py-3.5 md:text-lg md:px-10 md:py-4 bg-brand-pink text-brand-darkBrown hover:bg-white hover:text-brand-brown font-bold shadow-lg hover:shadow-xl hover:animate-none"
+                className="animate-pulse-slow w-full sm:w-auto text-base px-8 py-3.5 md:text-lg md:px-10 md:py-4 bg-brand-darkBrown text-brand-cream hover:bg-brand-brown hover:text-white font-bold shadow-lg hover:shadow-xl hover:animate-none border-2 border-brand-cream/20"
               >
                 View Menu
               </Button>
