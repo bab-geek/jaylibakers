@@ -104,8 +104,7 @@ const Menu: React.FC = () => {
               <div className="mt-auto">
                 <Button 
                   onClick={() => addToCart(cake)}
-                  className="w-full"
-                  variant="primary"
+                  className="w-full !bg-[#4E342E] hover:!bg-[#8D6E63] text-white shadow-md hover:shadow-lg border border-transparent"
                 >
                   <ShoppingCart size={18} />
                   Add to Cart

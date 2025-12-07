@@ -13,6 +13,7 @@ const navItems: NavItem[] = [
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isBumped, setIsBumped] = useState(false);
   const { cartCount, toggleCart } = useCart();
 
   useEffect(() => {
@@ -22,6 +23,15 @@ const Navbar: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Trigger bump animation when cart count changes
+  useEffect(() => {
+    if (cartCount > 0) {
+      setIsBumped(true);
+      const timer = setTimeout(() => setIsBumped(false), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [cartCount]);
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -72,12 +82,12 @@ const Navbar: React.FC = () => {
             {/* Cart Button */}
             <button
               onClick={toggleCart}
-              className="relative p-2.5 text-brand-darkBrown hover:bg-brand-pink/20 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-pink group"
+              className={`relative p-2.5 text-brand-darkBrown hover:bg-brand-pink/20 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-pink group ${isBumped ? 'scale-125 bg-brand-pink/30' : ''}`}
               aria-label="Open cart"
             >
               <ShoppingCart size={24} className="group-hover:scale-110 transition-transform duration-200" />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-brand-brown text-white text-xs font-bold h-5 w-5 flex items-center justify-center rounded-full animate-pulse-slow">
+                <span className="absolute -top-1 -right-1 bg-brand-brown text-white text-xs font-bold h-5 w-5 flex items-center justify-center rounded-full animate-fade-in-up">
                   {cartCount}
                 </span>
               )}

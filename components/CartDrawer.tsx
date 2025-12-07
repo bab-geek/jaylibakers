@@ -1,5 +1,5 @@
-import React from 'react';
-import { X, Minus, Plus, ShoppingBag, Trash2, ArrowRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, Minus, Plus, ShoppingBag, Trash2, ArrowRight, MessageCircle } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import Button from './Button';
 
@@ -13,7 +13,23 @@ const CartDrawer: React.FC = () => {
     cartTotal 
   } = useCart();
 
-  const handleCheckout = () => {
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  const handleCheckoutClick = () => {
+    setShowConfirmation(true);
+  };
+
+  const handleOrderMore = () => {
+    toggleCart();
+    setTimeout(() => {
+      const menuSection = document.getElementById('menu');
+      if (menuSection) {
+        menuSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+  };
+
+  const confirmCheckout = () => {
     const phoneNumber = "254706816485";
     
     // Generate item list string
@@ -25,6 +41,7 @@ const CartDrawer: React.FC = () => {
     
     const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
+    setShowConfirmation(false);
   };
 
   if (!isCartOpen) return null;
@@ -122,10 +139,10 @@ const CartDrawer: React.FC = () => {
 
         {/* Footer */}
         {items.length > 0 && (
-          <div className="border-t border-gray-100 p-6 bg-brand-cream/10 space-y-4">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-gray-600 font-medium">Subtotal</span>
-              <span className="text-lg font-bold text-brand-darkBrown">KES {cartTotal.toLocaleString()}</span>
+          <div className="border-t border-brand-brown/10 p-6 bg-[#FDF6E3] space-y-3 shadow-[0_-5px_15px_-5px_rgba(0,0,0,0.05)]">
+            <div className="flex justify-between items-center mb-1">
+              <span className="text-brand-brown font-medium">Subtotal</span>
+              <span className="text-xl font-bold text-brand-darkBrown">KES {cartTotal.toLocaleString()}</span>
             </div>
             
             <p className="text-xs text-gray-500 text-center mb-4">
@@ -133,8 +150,16 @@ const CartDrawer: React.FC = () => {
             </p>
 
             <Button 
-              onClick={handleCheckout} 
-              className="w-full justify-between group !bg-[#4E342E] hover:!bg-[#8D6E63] text-brand-cream"
+              onClick={handleOrderMore}
+              variant="outline"
+              className="w-full border-brand-brown/30 text-brand-brown hover:bg-brand-brown hover:text-white"
+            >
+              Order More
+            </Button>
+
+            <Button 
+              onClick={handleCheckoutClick} 
+              className="w-full justify-between group !bg-[#4E342E] hover:!bg-[#8D6E63] text-brand-cream shadow-lg hover:shadow-xl border-none"
             >
               <span>Checkout via WhatsApp</span>
               <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
@@ -142,6 +167,57 @@ const CartDrawer: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Confirmation Modal */}
+      {showConfirmation && (
+         <div className="fixed inset-0 z-[80] flex items-center justify-center p-4">
+            {/* Modal Backdrop */}
+            <div 
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" 
+              onClick={() => setShowConfirmation(false)}
+            />
+            
+            {/* Modal Content */}
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 relative z-90 animate-fade-in-up scale-100">
+              <div className="flex flex-col items-center text-center">
+                 <div className="bg-[#25D366]/10 p-4 rounded-full mb-4 text-[#25D366]">
+                    <MessageCircle size={32} />
+                 </div>
+                 <h3 className="text-xl font-serif font-bold text-brand-darkBrown mb-2">Proceed to WhatsApp?</h3>
+                 <p className="text-gray-600 mb-6 text-sm">
+                   You will be redirected to WhatsApp to send your order details to Jayli Bakers.
+                 </p>
+                 
+                 <div className="bg-brand-cream/30 rounded-lg p-4 w-full mb-6 text-left">
+                    <div className="flex justify-between text-sm mb-2">
+                      <span className="text-gray-600">Items:</span>
+                      <span className="font-bold text-brand-darkBrown">{items.reduce((acc, item) => acc + item.quantity, 0)}</span>
+                    </div>
+                    <div className="flex justify-between text-lg font-bold border-t border-brand-brown/10 pt-2 mt-1">
+                      <span className="text-brand-darkBrown">Total:</span>
+                      <span className="text-brand-brown">KES {cartTotal.toLocaleString()}</span>
+                    </div>
+                 </div>
+
+                 <div className="flex gap-3 w-full">
+                   <Button 
+                     variant="outline" 
+                     className="flex-1 border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-gray-800"
+                     onClick={() => setShowConfirmation(false)}
+                   >
+                     Cancel
+                   </Button>
+                   <Button 
+                     className="flex-1 !bg-[#25D366] hover:!bg-[#128C7E] text-white border-none shadow-md hover:shadow-lg"
+                     onClick={confirmCheckout}
+                   >
+                     Confirm Order
+                   </Button>
+                 </div>
+              </div>
+            </div>
+         </div>
+      )}
     </>
   );
 };

@@ -12,6 +12,7 @@ interface CartContextType {
   setIsCartOpen: (isOpen: boolean) => void;
   cartTotal: number;
   cartCount: number;
+  toastMessage: string | null;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -20,6 +21,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [items, setItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Load from local storage on mount
   useEffect(() => {
@@ -51,7 +53,14 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       return [...currentItems, { ...cake, quantity: 1 }];
     });
-    setIsCartOpen(true);
+    
+    // Show toast notification
+    setToastMessage(`${cake.name} added to cart!`);
+    
+    // Clear toast after 3 seconds
+    setTimeout(() => {
+      setToastMessage(null);
+    }, 3000);
   };
 
   const removeFromCart = (id: number) => {
@@ -87,7 +96,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       toggleCart,
       setIsCartOpen,
       cartTotal,
-      cartCount
+      cartCount,
+      toastMessage
     }}>
       {children}
     </CartContext.Provider>

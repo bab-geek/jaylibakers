@@ -6,6 +6,7 @@ import About from './components/About';
 import Testimonials from './components/Testimonials';
 import Footer from './components/Footer';
 import CartDrawer from './components/CartDrawer';
+import Toast from './components/Toast';
 import { CartProvider } from './context/CartContext';
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
       <div className="min-h-screen bg-brand-cream relative">
         <Navbar />
         <CartDrawer />
+        <Toast />
         <main>
           <Hero />
           <Menu />
